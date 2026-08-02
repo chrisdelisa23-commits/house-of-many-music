@@ -43,15 +43,6 @@
 @media(max-width:900px){.hero-grid,.story{grid-template-columns:1fr}.hero-grid{text-align:center}.cover{margin:auto;max-width:410px}.actions{justify-content:center}.stats{max-width:620px;margin:34px auto 0}.mission-grid{grid-template-columns:1fr 1fr}.genre-grid{grid-template-columns:1fr 1fr}.navlinks{display:none}.mission-banner-inner{grid-template-columns:1fr 1fr}.map-shell{grid-template-columns:1fr}.global-stats{grid-template-columns:repeat(3,1fr)}.mission-banner strong{grid-column:1/-1;text-align:center}.mission-pill{border-left:0;text-align:center}}
 @media(max-width:600px){.wrap{width:min(100% - 24px,1160px)}.hero{padding:30px 0 40px}.hero h1{font-size:3.25rem}.stats{grid-template-columns:1fr}.mission-grid,.charities,.genre-grid{grid-template-columns:1fr}.global-stats{grid-template-columns:1fr}#listenerMap{height:390px}.section{padding:64px 0}.sharebox{padding:34px 20px}.countdown{grid-template-columns:repeat(4,1fr);gap:6px}.countdown-box{padding:9px 4px}.countdown-box strong{font-size:1.15rem}.mission-banner-inner{grid-template-columns:1fr}.mission-pill{padding:7px 8px}.sticky-listen{left:12px;right:12px;bottom:12px}.sticky-listen.btn{width:calc(100% - 24px)}}
 </style>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('*').forEach(el => {
-    if(el.childNodes.length === 1 && el.innerText && el.innerText.match(/^PREVIEW \d+$/)) {
-      el.style.display = 'none';
-    }
-  });
-});
-</script>
 </head>
 <body>
 <nav class="nav"><div class="wrap navin"><div class="brand">HOUSE OF MANY</div><div class="navlinks"><a href="#music">Listen</a><a href="#world">World Map</a><a href="#mission">Mission</a><a href="#story">Story</a><a href="#share">Share</a></div></div></nav>
@@ -150,5 +141,15 @@ document.getElementById('locateBtn').addEventListener('click',()=>{const status=
 document.getElementById('pinForm').addEventListener('submit',async e=>{e.preventDefault();const status=document.getElementById('pinStatus');if(!selected){status.textContent='Please tap the map or use your approximate location first.';return}if(localStorage.getItem('houseOfManyPinAdded')){status.textContent='A pin from this browser has already been added. Thank you!';return}const city=document.getElementById('city').value.trim(),country=document.getElementById('country').value.trim();if(!city||!country){status.textContent='Please enter your city or area and country.';return}status.textContent='Adding your pin…';try{const r=await fetch(`${SUPABASE_URL}/rest/v1/listener_pins`,{method:'POST',headers:{...supabaseHeaders,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({latitude:selected.lat,longitude:selected.lng,city,country,favorite_version:favorite.value||null})});if(!r.ok)throw new Error(await r.text());localStorage.setItem('houseOfManyPinAdded','1');status.textContent='Your pin is live. Welcome to the House of Many world map!';await loadPins()}catch(err){console.warn(err);status.textContent='Your pin could not be saved. Please check the Supabase access policies.'}});
 initMap();loadPins();loadPreviewCounts();
 document.getElementById('shareBtn').addEventListener('click',async()=>{const status=document.getElementById('shareStatus');const data={title:'No Place Like Home | House of Many',text:'One song. Thirty-five genres. One universal message.',url:'https://houseofmanymusic.com'};try{if(navigator.share){await navigator.share(data);status.textContent='Thanks for sharing.'}else{await navigator.clipboard.writeText(data.url);status.textContent='Website link copied.'}}catch(e){status.textContent='Share canceled.'}});
+</script><script>
+function hidePreviews(){
+  document.querySelectorAll('*').forEach(el=>{
+    if(el.innerText && el.innerText.trim().match(/^PREVIEW \d+$/)){
+      el.style.display='none';
+    }
+  });
+}
+hidePreviews();
+setInterval(hidePreviews, 300);
 </script>
 </body></html>
