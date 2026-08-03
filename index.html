@@ -42,31 +42,38 @@
 
 @media(max-width:900px){.hero-grid,.story{grid-template-columns:1fr}.hero-grid{text-align:center}.cover{margin:auto;max-width:410px}.actions{justify-content:center}.stats{max-width:620px;margin:34px auto 0}.mission-grid{grid-template-columns:1fr 1fr}.genre-grid{grid-template-columns:1fr 1fr}.navlinks{display:none}.mission-banner-inner{grid-template-columns:1fr 1fr}.map-shell{grid-template-columns:1fr}.global-stats{grid-template-columns:repeat(3,1fr)}.mission-banner strong{grid-column:1/-1;text-align:center}.mission-pill{border-left:0;text-align:center}}
 @media(max-width:600px){.wrap{width:min(100% - 24px,1160px)}.hero{padding:30px 0 40px}.hero h1{font-size:3.25rem}.stats{grid-template-columns:1fr}.mission-grid,.charities,.genre-grid{grid-template-columns:1fr}.global-stats{grid-template-columns:1fr}#listenerMap{height:390px}.section{padding:64px 0}.sharebox{padding:34px 20px}.countdown{grid-template-columns:repeat(4,1fr);gap:6px}.countdown-box{padding:9px 4px}.countdown-box strong{font-size:1.15rem}.mission-banner-inner{grid-template-columns:1fr}.mission-pill{padding:7px 8px}.sticky-listen{left:12px;right:12px;bottom:12px}.sticky-listen.btn{width:calc(100% - 24px)}}
-/* Fix mobile - house background + full centering */
+/* MOBILE CENTERING ONLY - fix left shift */
 @media(max-width:900px){
-  body{
-    background: url('/assets/Website_background_WIDE_r3.jpg') center top / cover no-repeat !important;
-    background-attachment: scroll !important;
+  html, body{
+    overflow-x:hidden !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
   }
-  .hero{
-    background: transparent !important;
-    padding:30px 0 !important;
-  }
-  .hero-grid, .story, .mission-grid, .genre-grid, .charities, .global-stats, .mission-banner-inner, .map-shell{
-    grid-template-columns:1fr !important;
-    justify-items:center !important;
-    text-align:center !important;
-  }
-  .cover{margin:0 auto !important; max-width:360px !important;}
-  .wrap{width:calc(100% - 32px) !important; margin:0 auto !important;}
-  .section, .section-dark{
-    background: transparent !important;
-  }
-  .actions, .stats, .mission-pill{
+  .nav, .hero, .section, .section-dark{
+    width:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
     justify-content:center !important;
-    text-align:center !important;
+  }
+  .wrap, .navin, .hero-grid{
+    width:90% !important;
+    max-width:400px !important;
     margin-left:auto !important;
     margin-right:auto !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    text-align:center !important;
+  }
+  .cover{
+    margin:0 auto !important;
+    display:block !important;
+  }
+  .preview-grid, .mission-grid, .genre-grid, .charities, .global-stats{
+    width:100% !important;
+    margin:0 auto !important;
+    justify-items:center !important;
   }
 </style>
 </head>
