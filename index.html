@@ -108,7 +108,7 @@ function render(q=''){
     const el=document.createElement('article');
     el.className='track';
     el.setAttribute('data-genre',t[0]);
-    el.innerHTML=`<div class="track-top"><div><div class="track-num">PREVIEW ${String(n).padStart(2,'0')}</div><h3 class="track-name">${t[0]}</h3><span class="track-language">${t[1]}</span></div></div><audio controls preload="metadata" src="${t[2]}" data-genre="${t[0]}" aria-label="${t[0]} preview">Your browser does not support audio.</audio><div class="listen-meta"><span class="listen-count" data-count-for="${t[0]}">0 previews</span><span class="listen-note">on this website</span></div>`;
+    el.innerHTML=`<div class="track-top"><div><h3 class="track-name">${t[0]}</h3><span class="track-language">${t[1]}</span></div></div><audio controls preload="metadata" src="${t[2]}" data-genre="${t[0]}" aria-label="${t[0]} preview">Your browser does not support audio.</audio><div class="listen-meta"><span class="listen-count" data-count-for="${t[0]}">0 previews</span><span class="listen-note">on this website</span></div>`;
     grid.appendChild(el)
   });
   bindAudio();
@@ -141,15 +141,5 @@ document.getElementById('locateBtn').addEventListener('click',()=>{const status=
 document.getElementById('pinForm').addEventListener('submit',async e=>{e.preventDefault();const status=document.getElementById('pinStatus');if(!selected){status.textContent='Please tap the map or use your approximate location first.';return}if(localStorage.getItem('houseOfManyPinAdded')){status.textContent='A pin from this browser has already been added. Thank you!';return}const city=document.getElementById('city').value.trim(),country=document.getElementById('country').value.trim();if(!city||!country){status.textContent='Please enter your city or area and country.';return}status.textContent='Adding your pin…';try{const r=await fetch(`${SUPABASE_URL}/rest/v1/listener_pins`,{method:'POST',headers:{...supabaseHeaders,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({latitude:selected.lat,longitude:selected.lng,city,country,favorite_version:favorite.value||null})});if(!r.ok)throw new Error(await r.text());localStorage.setItem('houseOfManyPinAdded','1');status.textContent='Your pin is live. Welcome to the House of Many world map!';await loadPins()}catch(err){console.warn(err);status.textContent='Your pin could not be saved. Please check the Supabase access policies.'}});
 initMap();loadPins();loadPreviewCounts();
 document.getElementById('shareBtn').addEventListener('click',async()=>{const status=document.getElementById('shareStatus');const data={title:'No Place Like Home | House of Many',text:'One song. Thirty-five genres. One universal message.',url:'https://houseofmanymusic.com'};try{if(navigator.share){await navigator.share(data);status.textContent='Thanks for sharing.'}else{await navigator.clipboard.writeText(data.url);status.textContent='Website link copied.'}}catch(e){status.textContent='Share canceled.'}});
-</script><script>
-function hidePreviews(){
-  document.querySelectorAll('*').forEach(el=>{
-    if(el.innerText && el.innerText.trim().match(/^PREVIEW \d+$/)){
-      el.style.display='none';
-    }
-  });
-}
-hidePreviews();
-setInterval(hidePreviews, 300);
 </script>
 </body></html>
