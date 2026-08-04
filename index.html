@@ -178,10 +178,21 @@ function updatePreviewSummary(){
   const total = Object.values(previewCounts).reduce((a,b)=>a+b,0);
   document.getElementById('listenTotal').textContent = formatCount(total);
   const top = Object.entries(previewCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  el.innerHTML = top.length? top.map(([name,count])=>{
+  if(!top.length){
+    el.innerHTML = '<p class="map-instruction">Preview tallies will appear as listeners explore the album.</p>';
+    return;
+  }
+  // Build two columns: 1-5 left, 6-10 right
+  const left = top.slice(0,5);
+  const right = top.slice(5,10);
+  const makeRow = (name,count,rank) => {
     const clean = (name||'').trim() || name;
-    return `<div class="top-version-row" style="display:flex; justify-content:flex-start; gap:10px; align-items:baseline; padding:7px 0; border-bottom:1px solid #eee;"><span style="color:#221b17;font-weight:800;">${clean}</span><strong style="color:var(--ruby);">${formatCount(count)} previews</strong></div>`;
-  }).join('') : '<p class="map-instruction">Preview tallies will appear as listeners explore the album.</p>';
+    return `<div style="display:flex; gap:8px; align-items:baseline; padding:7px 0; border-bottom:1px solid #eee;"><span style="min-width:22px; font-weight:900; color:#888;">${rank}.</span><span style="color:#221b17; font-weight:800;">${clean}</span><strong style="color:var(--ruby); margin-left:6px;">${formatCount(count)} previews</strong></div>`;
+  };
+  el.innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:0 24px;">
+    <div>${left.map(([n,c],i)=>makeRow(n,c,i+1)).join('')}</div>
+    <div>${right.map(([n,c],i)=>makeRow(n,c,i+6)).join('')}</div>
+  </div>`;
 }
 render();document.getElementById('search').addEventListener('input',e=>render(e.target.value));
 
