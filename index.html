@@ -162,32 +162,15 @@ async function loadPreviewCounts(){
   try{const r=await fetch(`${SUPABASE_URL}/rest/v1/preview_plays?select=version_name&limit=10000`,{headers:supabaseHeaders,cache:'no-store'});if(!r.ok)throw new Error(await r.text());const rows=await r.json();Object.keys(previewCounts).forEach(k=>delete previewCounts[k]);rows.forEach(row=>{previewCounts[row.version_name]=(previewCounts[row.version_name]||0)+1});updateCountLabels();updatePreviewSummary()}catch(e){console.warn('Preview tallies could not load:',e);document.getElementById('listenTotal').textContent='—'}
 }
 function updatePreviewSummary(){
-  const box = document.querySelector('.top-versions');
-  const el = document.getElementById('topVersions');
-  if(!box ||!el) return;
-
-  // Force the h3 to exist
-  if(!box.querySelector('h3')){
-    const h = document.createElement('h3');
-    h.textContent = 'Most-previewed versions';
-    h.style.display = 'block';
-    box.prepend(h);
-  }
-
   const total=Object.values(previewCounts).reduce((a,b)=>a+b,0);
-  const totalEl = document.getElementById('listenTotal');
-  if(totalEl) totalEl.textContent=formatCount(total);
-
+  document.getElementById('listenTotal').textContent=formatCount(total);
   const top=Object.entries(previewCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  if(!top.length){
-    el.innerHTML='<p class="map-instruction">Preview tallies will appear as listeners explore the album.</p>';
-    return;
-  }
-  el.innerHTML = top.map(([name,count])=>{
-    const clean = (name||'').trim() || name;
-    return `<div class="top-version-row"><span style="color:#221b17;font-weight:800;display:block!important;">${clean}</span><strong style="color:var(--ruby);">${formatCount(count)} previews</strong></div>`;
-  }).join('');
-}
+  document.getElementById('topVersions').innerHTML = top.length
+   ? top.map(([name,count])=>{
+        const clean = (name||'').trim() || name;
+        return `<div class="top-version-row"><span style="color:#221b17;font-weight:800;display:block!important;">${clean}</span><strong>${formatCount(count)} previews</strong></div>`;
+      }).join('')
+    : '<p class="map-instruction">Preview tallies will appear as listeners explore the album.</p>';
 }
 render();document.getElementById('search').addEventListener('input',e=>render(e.target.value));
 
