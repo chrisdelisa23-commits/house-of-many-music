@@ -177,19 +177,23 @@ function updatePreviewSummary(){
   h3.style.margin = '0 0 12px 0';
   const total = Object.values(previewCounts).reduce((a,b)=>a+b,0);
   document.getElementById('listenTotal').textContent = formatCount(total);
-  const top = Object.entries(previewCounts).sort((a,b)=>b[1]-a[1]).slice(0,15); // TOP 15 NOW
+  const top = Object.entries(previewCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
   if(!top.length){
     el.innerHTML = '<p class="map-instruction">Preview tallies will appear as listeners explore the album.</p>';
     return;
   }
-  const left = top.slice(0,8); // 1-8 on left
-  const right = top.slice(8,15); // 9-15 on right
+  // Build two columns: 1-5 left, 6-10 right
+  const left = top.slice(0,5);
+  const right = top.slice(5,10);
   const makeRow = (name,count,rank) => {
     const clean = (name||'').trim() || name;
-    return `<div style="display:flex; gap:8px; align-items:baseline; padding:6px 0; border-bottom:1px solid #eee;"><span style="min-width:22px; font-weight:900; color:#888;">${rank}.</span><span style="color:#221b17; font-weight:800;">${clean}</span><strong style="color:var(--ruby); margin-left:6px;">${formatCount(count)} previews</strong></div>`;
+    return `<div style="display:flex; gap:8px; align-items:baseline; padding:7px 0; border-bottom:1px solid #eee;"><span style="min-width:22px; font-weight:900; color:#888;">${rank}.</span><span style="color:#221b17; font-weight:800;">${clean}</span><strong style="color:var(--ruby); margin-left:6px;">${formatCount(count)} previews</strong></div>`;
   };
-  el.innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:0 28px;">
-    <div>${left.map
+  el.innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:0 24px;">
+    <div>${left.map(([n,c],i)=>makeRow(n,c,i+1)).join('')}</div>
+    <div>${right.map(([n,c],i)=>makeRow(n,c,i+6)).join('')}</div>
+  </div>`;
+}
 render();document.getElementById('search').addEventListener('input',e=>render(e.target.value));
 
 const favorite=document.getElementById('favorite');tracks.forEach(t=>favorite.insertAdjacentHTML('beforeend',`<option value="${t[0]}">${t[0]}</option>`));
