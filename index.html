@@ -189,7 +189,7 @@ function updatePreviewSummary(){
   const col3 = top.slice(10,15);
   const makeRow = (name,count,rank) => {
     const clean = (name||'').trim() || name;
-    return `<div style="display:flex; gap:6px; align-items:baseline; padding:6px 0; border-bottom:1px solid #eee;"><span style="min-width:22px; font-weight:900; color:#888;">${rank}.</span><span style="color:#221b17; font-weight:800;">${clean}</span><strong style="color:var(--ruby); margin-left:6px; white-space:nowrap;">${formatCount(count)} previews</strong></div>`;
+    return `<div style="display:flex; align-items:baseline; justify-content:space-between; padding:7px 0; border-bottom:1px solid #eee;"><span style="display:flex; gap:6px;"><span style="min-width:24px; font-weight:900; color:#888;">${rank}.</span><span style="color:#221b17; font-weight:800;">${clean}</span></span><strong style="color:var(--ruby); white-space:nowrap; margin-left:auto; text-align:right;">${formatCount(count)} previews</strong></div>`;
     };
   el.innerHTML = `<div class="top15-grid">
     <div>${col1.map(([n,c],i)=>makeRow(n,c,i+1)).join('')}</div>
