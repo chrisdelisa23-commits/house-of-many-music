@@ -39,6 +39,7 @@
   .charity{
     width:100% !important;
     max-width:100% !important;
+    min-width:0 !important;
   }
   .charity h3, .charity p{
     white-space:normal !important;
@@ -46,23 +47,39 @@
   }
   .mission-grid{
     grid-template-columns:1fr 1fr !important;
+    min-width:0 !important;
   }
   .hero-grid, .story{
     grid-template-columns:1fr !important;
     gap:24px !important;
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+  .hero-grid > *, .story > *{
+    min-width:0 !important;
+    max-width:100% !important;
   }
   .hero h1{
     font-size:clamp(2.2rem,10vw,3.4rem) !important;
     line-height:.9 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
   }
-  .section h2{
+  .section h2, .story h2{
     font-size:clamp(1.8rem,8vw,2.6rem) !important;
     line-height:1.05 !important;
-    overflow-wrap:break-word !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
     word-break:break-word !important;
+    text-wrap:balance !important;
+    max-width:100% !important;
   }
   .wrap{
     width:min(1160px,calc(100% - 32px)) !important;
+    max-width:100% !important;
+  }
+  html, body{
+    overflow-x:hidden !important;
   }
 }
 @media (max-width: 640px) {
