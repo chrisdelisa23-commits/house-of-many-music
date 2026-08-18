@@ -207,7 +207,7 @@ const tracks=[
 ['Classical','Classical / Operatic','audio/12-classical-opera.mp3'],
 ['Disco / Funk','English','audio/14-disco-funk.mp3'],
 ['Doo Wop','English','audio/15-doo-wop.mp3'],
-['Folk','English','audio/17-folk-americana.mp3'],
+['Folk / Americana','English','audio/17-folk-americana.mp3'],
 ['Gospel','English','audio/18-gospel.mp3'],
 ['Heavy Metal','English','audio/19-heavy-metal.mp3'],
 ['Hebrew','Hebrew / English','audio/20-hebrew-english.mp3'],
@@ -231,7 +231,7 @@ function render(q=''){
     const el=document.createElement('article');
     el.className='track';
     el.setAttribute('data-genre',t[0]);
-    el.innerHTML=`<div class="track-top"><div><h3 class="track-name">${t[0] === 'Arabic / English' ? 'Arabic' : t[0] === 'Alternative Rock' ? 'Alt. Rock' : t[0]}</h3></div></div><div class="audio-pill" data-src="${t[2]}"><button class="aplay">▶</button><span class="acur">00:00</span><div class="abar"><div class="afill"></div></div><span class="adur">-00:28</span></div><audio preload="metadata" src="${t[2]}" data-genre="${t[0]}"></audio><div class="listen-meta"><span class="listen-count" data-count-for="${t[0]}">0 previews</span></div>`;
+    el.innerHTML=`<div class="track-top"><div><h3 class="track-name">${t[0] === 'Arabic / English' ? 'Arabic' : t[0] === 'Alternative Rock' ? 'Alt. Rock' : t[0] === 'Folk / Americana' ? 'Folk' : t[0]}</h3></div></div><div class="audio-pill" data-src="${t[2]}"><button class="aplay">▶</button><span class="acur">00:00</span><div class="abar"><div class="afill"></div></div><span class="adur">-00:28</span></div><audio preload="metadata" src="${t[2]}" data-genre="${t[0]}"></audio><div class="listen-meta"><span class="listen-count" data-count-for="${t[0]}">0 previews</span></div>`;
     grid.appendChild(el)
   });
   bindAudio();
