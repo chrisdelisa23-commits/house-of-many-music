@@ -234,7 +234,31 @@ async function recordPreview(genre){
 }
 function bindAudio(){document.querySelectorAll('audio').forEach(a=>{let timer=null;const pill=a.previousElementSibling;if(!pill||!pill.classList.contains('audio-pill'))return;const btn=pill.querySelector('.aplay');const cur=pill.querySelector('.acur');const durEl=pill.querySelector('.adur');const fill=pill.querySelector('.afill');const abar=pill.querySelector('.abar');a.addEventListener('loadedmetadata',()=>{if(durEl&&a.duration)durEl.textContent='-'+Math.floor(a.duration)+'s'});a.addEventListener('timeupdate',()=>{if(cur)cur.textContent=new Date(a.currentTime*1000).toISOString().substr(14,5);if(fill&&a.duration)fill.style.width=(a.currentTime/a.duration*100)+'%'});if(btn)btn.addEventListener('click',()=>{if(a.paused){document.querySelectorAll('audio').forEach(b=>{if(b!==a)b.pause()});a.play()}else{a.pause()}});a.addEventListener('play',()=>{if(btn)btn.textContent='⏸';document.querySelectorAll('audio').forEach(b=>{if(b!==a)b.pause()});clearTimeout(timer);timer=setTimeout(()=>{if(!a.paused&&a.currentTime>=4)recordPreview(a.dataset.genre)},5000)});a.addEventListener('pause',()=>{if(btn)btn.textContent='▶';clearTimeout(timer)});a.addEventListener('ended',()=>{if(btn)btn.textContent='▶';clearTimeout(timer);if(fill)fill.style.width='0%'});if(abar)abar.addEventListener('click',e=>{const r=abar.getBoundingClientRect();if(a.duration)a.currentTime=((e.clientX-r.left)/r.width)*a.duration})})}
 async function loadPreviewCounts(){
-  try{const r=await fetch(`${SUPABASE_URL}/rest/v1/preview_plays?select=version_name&limit=10000`,{headers:supabaseHeaders,cache:'no-store'});if(!r.ok)throw new Error(await r.text());const rows=await r.json();Object.keys(previewCounts).forEach(k=>delete previewCounts[k]);rows.forEach(row=>{previewCounts[row.version_name]=(previewCounts[row.version_name]||0)+1});updateCountLabels();updatePreviewSummary()}catch(e){console.warn('Preview tallies could not load:',e);document.getElementById('listenTotal').textContent='—'}
+  try{
+    let allRows = [];
+    let from = 0;
+    const step = 1000;
+    while(true){
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/preview_plays?select=version_name`,{
+        headers:{...supabaseHeaders, Range: `${from}-${from+step-1}`},
+        cache:'no-store'
+      });
+      if(!r.ok) throw new Error(await r.text());
+      const rows = await r.json();
+      allRows = allRows.concat(rows);
+      if(rows.length < step) break;
+      from += step;
+    }
+    Object.keys(previewCounts).forEach(k=>delete previewCounts[k]);
+    allRows.forEach(row=>{
+      previewCounts[row.version_name]=(previewCounts[row.version_name]||0)+1
+    });
+    updateCountLabels();
+    updatePreviewSummary();
+  }catch(e){
+    console.warn('Preview tallies could not load:',e);
+    document.getElementById('listenTotal').textContent='—'
+  }
 }
 function updatePreviewSummary(){
   const box = document.querySelector('.top-versions');
