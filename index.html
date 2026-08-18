@@ -284,11 +284,13 @@ function updatePreviewSummary(){
     h3 = document.createElement('h3');
     box.prepend(h3);
   }
-  h3.textContent = 'Most-previewed versions';
+  h3.textContent = 'Top 15 Most Previewed Versions';
   h3.style.display = 'block';
   h3.style.color = '#221b17';
   h3.style.fontFamily = 'Georgia, serif';
   h3.style.margin = '0 0 12px 0';
+  h3.style.textAlign = 'center';
+h3.style.width = '100%';
   const total = Object.values(previewCounts).reduce((a,b)=>a+b,0);
   document.getElementById('listenTotal').textContent = formatCount(total);
   const top = Object.entries(previewCounts).sort((a,b)=>b[1]-a[1]).slice(0,15);
