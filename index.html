@@ -223,7 +223,7 @@ const tracks=[
 ['Sertanejo','Portuguese (Brazil)','audio/33-sertanejo-portuguese.mp3'],
 ['Sicilian','Sicilian','audio/34-sicilian.mp3'],
 ['Swing','English','audio/35-swing.mp3']
-];
+];tracks.sort((a,b) => a[0].localeCompare(b[0]));
 const grid=document.getElementById('tracks');
 function render(q=''){
   grid.innerHTML='';
